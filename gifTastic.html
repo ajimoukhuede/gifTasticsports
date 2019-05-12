@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>The Gif Button</title>
+</head>
+
+<body>
+    
+    <div id="gifButtons">
+        <button class="gifSearchButton">gif button</button>
+        <button class="gifSearchButton" tag="Sports">Sports gifs</button>
+        <button class="gifSearchButton" tag="Art">Art gifs</button>
+        <button class="gifSearchButton" tag="dogs">Dogs gifs</button>
+        <button class="gifSearchButton" tag="ocean">Ocean gifs</button>
+    </div>
+
+    
+    <div class="topnav">
+        <input id="gif-search" type="text" placeholder="Search...">
+        <button id="addGifButton">Submit</button>
+    </div>
+
+    <div id="images">
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+       
+
+        $("#addGifButton").click( function(){
+            let tag = $("#gif-search").val();         
+            
+            
+            let newButton = $("<button>"); 
+            
+            newButton.html(tag + " gifs");        
+            
+                  
+            newButton.attr("tag", tag)    
+
+           
+            newButton.addClass("gifSearchButton");
+
+           
+            newButton.click(gifSearchClick);
+
+           
+            $("#gifButtons").append(newButton);
+        });
+        
+        $(".gifSearchButton").click(gifSearchClick);
+
+        function gifSearchClick () {
+
+        let tag = $(this).attr("tag");
+        if (typeof tag != "string" ) {
+            tag == "";
+        }
+        let queryURL = "https://api.giphy.com/v1/gifs/random?api_key=Bor6sKSt11NyWHt31QSu7WH6vHSeSqWN&tag=" + tag;
+
+        
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+
+            
+            .then(function (response) {
+                let gifImage = $("<img>");
+
+                let imageUrl = response.data.image_original_url;
+
+                $("#images").append(gifImage);
+
+                gifImage.attr("src", imageUrl);
+                gifImage.attr("alt", "gif image");
+            });
+        }
+    </script>
+</body>
+
+</html>
